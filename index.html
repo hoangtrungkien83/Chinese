@@ -789,6 +789,87 @@
   }
   .cat-speed-btn:hover { background: var(--item-hover); color: var(--text); }
   .cat-speed-btn.active-speed { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── Flappy Bird button ── */
+  .btn-flappy {
+    background: linear-gradient(135deg, #f7d308, #f75300);
+    color: #fff;
+    padding: 10px 22px;
+    font-size: 14px;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    animation: flappy-pulse 2s ease-in-out infinite;
+  }
+  @keyframes flappy-pulse {
+    0%, 100% { box-shadow: 0 2px 16px rgba(247,211,8,0.4), 0 0 0 0 rgba(247,83,0,0.3); }
+    50%       { box-shadow: 0 4px 24px rgba(247,83,0,0.6), 0 0 0 6px rgba(247,83,0,0); }
+  }
+  .btn-flappy:hover { filter: brightness(1.12); transform: scale(1.04); animation: none; box-shadow: 0 4px 20px rgba(247,83,0,0.55); }
+  .btn-flappy:active { transform: scale(0.97); }
+  .btn-flappy::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: flappy-shine 2.5s ease-in-out infinite;
+  }
+  @keyframes flappy-shine {
+    0%   { transform: translateX(-100%); }
+    40%  { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* ── Flappy Bird modal ── */
+  #flappyModal {
+    display: none; position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(10px);
+    z-index: 9500;
+    align-items: center; justify-content: center;
+  }
+  #flappyModal.open { display: flex; }
+  .flappy-modal-box {
+    background: #0f172a;
+    border: 1.5px solid rgba(247,211,8,0.35);
+    border-radius: 28px;
+    padding: 0;
+    width: 380px;
+    max-width: 96vw;
+    box-shadow: 0 0 0 1px rgba(247,83,0,0.15), 0 24px 60px rgba(0,0,0,0.7), 0 0 60px rgba(247,211,8,0.12);
+    animation: popIn 0.22s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  .flappy-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px 14px;
+    background: linear-gradient(135deg, rgba(247,211,8,0.12), rgba(247,83,0,0.10));
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .flappy-modal-title {
+    font-size: 17px; font-weight: 800;
+    background: linear-gradient(135deg, #f7d308, #f75300);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+  }
+  .flappy-close-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 99px;
+    color: #fff; font-size: 13px; font-weight: 600;
+    padding: 4px 12px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .flappy-close-btn:hover { background: rgba(255,255,255,0.15); }
+  #flappyFrame {
+    width: 100%;
+    height: 540px;
+    border: none;
+    display: block;
+    background: #70c5ce;
+  }
 </style>
 </head>
 <body>
@@ -843,24 +924,21 @@
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;">Color</div>
         <div style="display:flex;flex-wrap:wrap;gap:7px;">
-          <button class="cat-color-btn" onclick="setCatColor('black')"   title="Black"  style="--c:#2a2a2a;--s:#111111;--t:#555;--e:#6abfe8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('white')"   title="White"  style="--c:#f5f0eb;--s:#c8b0a0;--t:#fff5f0;--e:#a0c8e8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('orange')"  title="Orange" style="--c:#fcd4a0;--s:#e8996a;--t:#fff5e8;--e:#6abfe8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('red')"     title="Red"    style="--c:#e87070;--s:#c03030;--t:#ffe0e0;--e:#5555cc;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('blue')"    title="Blue"   style="--c:#70a8e8;--s:#2060c0;--t:#e0eeff;--e:#ffe066;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('green')"   title="Green"  style="--c:#70c880;--s:#2a8040;--t:#e0ffea;--e:#ffe066;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('yellow')"  title="Yellow" style="--c:#ffe066;--s:#c89020;--t:#fffbe0;--e:#70a8e8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('brown')"   title="Brown"  style="--c:#a0724a;--s:#5a3820;--t:#f5e8d8;--e:#6abfe8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('gray')"    title="Gray"   style="--c:#c8c8d0;--s:#7a7a8a;--t:#f0f0f5;--e:#6abfe8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('silver')"   title="Silver"   style="--c:#d0d0dc;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('void')"     title="Void"     style="--c:#1e1e2a;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('peach')"    title="Peach"    style="--c:#ffddc8;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('teal')"     title="Teal"     style="--c:#5cb8b2;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('lavender')" title="Lavender" style="--c:#c8aaee;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('caramel')"  title="Caramel"  style="--c:#c8915a;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('rosegold')" title="Rose Gold" style="--c:#e8a898;">⬤</button>
-          <button class="cat-color-btn" onclick="setCatColor('sage')"     title="Sage"     style="--c:#88aa78;">⬤</button>
-          
+          <button class="cat-color-btn" onclick="setCatColor('cream')"     title="Cream White"       style="--c:#F8F4E8;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('snow')"      title="Snow White"        style="--c:#FFFFFF;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('britgray')"  title="British Gray"      style="--c:#8A8F98;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('bluesmoke')" title="Blue Smoke"        style="--c:#6E7F80;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('ginger')"    title="Ginger Orange"     style="--c:#D97B2D;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('honey')"     title="Honey Gold"        style="--c:#C98E39;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('choco')"     title="Chocolate Brown"   style="--c:#5A3A29;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('midnight')"  title="Midnight Black"    style="--c:#111111;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('charcoal')"  title="Charcoal Smoke"    style="--c:#2B2B2B;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('silver')"    title="Silver Shaded"     style="--c:#C0C0C0;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('lilac')"     title="Lilac Mist"        style="--c:#B9A7B3;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('bluecream')" title="Blue Cream"        style="--c:#9FA8B2;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('cinnamon')"  title="Cinnamon Spice"    style="--c:#8B5A3C;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('fawn')"      title="Fawn Beige"        style="--c:#C9AE9B;">⬤</button>
+          <button class="cat-color-btn" onclick="setCatColor('chinchilla')" title="Golden Chinchilla" style="--c:#C9A76A;">⬤</button>
         </div>
       </div>
 
@@ -888,15 +966,27 @@
       <!-- Show/Hide toggle -->
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <span style="font-size:12px;color:var(--muted);">Show cat</span>
-        <button id="catToggleBtn" onclick="toggleCatVisibility()" style="
-          background: var(--accent);
-          color: #fff;
-          border: none;
-          border-radius: 99px;
-          padding: 4px 14px;
-          font-size: 12px; font-weight: 600;
-          cursor: pointer;
-        ">Hide</button>
+        <div style="display:flex;gap:6px;">
+          <button id="catFreezeBtn" onclick="toggleCatFreeze()" title="Dừng mèo tại chỗ" style="
+            background: var(--surface);
+            color: var(--muted2);
+            border: 1px solid var(--border2);
+            border-radius: 99px;
+            padding: 4px 14px;
+            font-size: 12px; font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+          ">❄️ Freeze</button>
+          <button id="catToggleBtn" onclick="toggleCatVisibility()" style="
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 99px;
+            padding: 4px 14px;
+            font-size: 12px; font-weight: 600;
+            cursor: pointer;
+          ">Hide</button>
+        </div>
       </div>
     </div>
   </div>
@@ -934,6 +1024,9 @@
       <button class="btn btn-nav" onclick="showAllVoices()" title="View all available voices">🔍 Voices</button>
       <button class="btn btn-quiz" id="btnQuiz" onclick="openQuizModal()" title="Open practice mode">
         ✍️ Check<div class="quiz-dot"></div>
+      </button>
+      <button class="btn btn-flappy" onclick="openFlappyModal()" title="Play Flappy Bird mini game">
+        🐦 Flappy Bird
       </button>
       <div class="speed-wrap">
         <span class="speed-label">Speed:</span>
@@ -2027,11 +2120,28 @@ document.body.addEventListener('click', function initAudio() {
   #cat-widget.idle svg { animation: cat-float 2.2s ease-in-out infinite; }
   @keyframes cat-walk-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(24deg)} }
   @keyframes cat-walk-r { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-24deg)} }
+ @keyframes cat-scythe-left {
+  0%, 100% {
+    transform: translate(-15px, -10px) rotate(-8deg);
+  }
+
+  30% {
+    transform: translate(-15px, -10px) rotate(-13deg);
+  }
+
+  70% {
+    transform: translate(-15px, -10px) rotate(-3deg);
+  }
+}
+
+#cat-widget.face-left .r-scythe {
+  animation: cat-scythe-left 2.2s ease-in-out infinite !important;
+}
   #cat-widget.walking .paw-left  { transform-box:fill-box; transform-origin:50% 0%; animation: cat-walk-l 0.55s ease-in-out infinite; }
   #cat-widget.walking .paw-right { transform-box:fill-box; transform-origin:50% 0%; animation: cat-walk-r 0.55s ease-in-out infinite; }
   #cat-widget.face-left svg { transform: scaleX(-1); }
-  #cat-widget.face-left #cat-img-skin { transform: scaleX(-1); }
-
+  #cat-widget.face-left #cat-svg-skin svg { transform: scaleX(-1); }
+  
   /* Emotion overlays */
   #cat-emotion {
     position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
@@ -2042,17 +2152,30 @@ document.body.addEventListener('click', function initAudio() {
   }
   #cat-emotion.show { opacity: 1; }
 
-  /* Skin: image-based skins */
-  #cat-img-skin {
+  /* Skin: SVG-injected skins */
+  #cat-svg-skin {
     display: none;
-    width: 80px; height: 80px;
-    object-fit: contain;
     position: absolute; top: 0; left: 0;
+    width: 80px; height: 80px;
     pointer-events: none;
   }
-  #cat-widget.skin-image svg { display: none; }
-  #cat-widget.skin-image #cat-img-skin { display: block; }
-
+  #cat-svg-skin svg {
+    overflow: visible;
+    width: 80px; height: 80px;
+    position: absolute; top: 0; left: 0;
+  }
+  #cat-widget.skin-image > svg:first-of-type { display: none; }
+  #cat-widget.skin-image #cat-svg-skin { display: block; }
+  /* Reaper scythe swing — pivot at shaft base near cat body */
+  @keyframes cat-scythe {
+    0%, 100% { transform: rotate(0deg); }
+    30%      { transform: rotate(10deg); }
+    70%      { transform: rotate(-7deg); }
+  }
+  .cat-scythe { transform-box: fill-box; transform-origin: 50% 80%; animation: cat-scythe 2.2s ease-in-out infinite; }
+  #cat-widget.face-left .r-scythe {
+  transform: translate(-10px, -5px) scale(1.3,1) rotate(-20deg) !important;
+}
   /* Bounce on straying */
   @keyframes cat-panic {
     0%,100%{transform:rotate(0deg) scale(1)}
@@ -2062,7 +2185,7 @@ document.body.addEventListener('click', function initAudio() {
     80%{transform:rotate(5deg) scale(1.02)}
   }
   #cat-widget.panicking svg,
-  #cat-widget.panicking #cat-img-skin { animation: cat-panic 0.5s ease-in-out 2; }
+  #cat-widget.panicking #cat-svg-skin { animation: cat-panic 0.5s ease-in-out 2; }
 
   /* ── Cat Speech Bubble ── */
   #cat-speech-bubble {
@@ -2113,7 +2236,8 @@ document.body.addEventListener('click', function initAudio() {
 <div id="cat-widget" class="idle" title="Meow~ click me!" onclick="catBlink(); catSpeak()">
   <div id="cat-speech-bubble"></div>
   <div id="cat-emotion">😻</div>
-  <img id="cat-img-skin" src="" alt="cat" draggable="false"/>
+  <!-- SVG skin container: receives injected animated SVG directly -->
+  <div id="cat-svg-skin"></div>
 <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
   <g class="cat-tail">
     <path d="M40 62 Q20 70 14 58 Q8 46 22 44" fill="none" stroke="var(--cat-stroke)" stroke-width="5.5" stroke-linecap="round"/>
@@ -2168,6 +2292,129 @@ document.body.addEventListener('click', function initAudio() {
 </svg>
 </div>
 
+<!-- ===== PAW PRINT CANVAS ===== -->
+<canvas id="paw-canvas" style="
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9997;
+"></canvas>
+<script>
+/* ══ PAW PRINT SYSTEM ══
+   Canvas-only, pool-based, zero DOM churn.
+   Paw shapes baked as Path2D — reused every frame.
+   Prints appear BEHIND the cat (~2x cat width trail).
+   Fade in 2 seconds.
+   ═══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('paw-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  /* ── Resize canvas to match viewport ── */
+  function resizeCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
+  const CAT_SIZE    = 80;
+  const POOL_SIZE   = 60;    // enough for a 160px trail at 14px steps
+  const FADE_RATE   = 0.5 / (2 * 60); // 0.5 start alpha / 2s / 60fps ≈ 0.00417
+  const STEP_DIST   = 14;    // px between stamps — denser trail
+  const PAW_SCALE   = 0.52;  // paw size
+
+  /* Pre-build a heart Path2D (relative to origin 0,0) */
+  function buildHeartPath() {
+    const p = new Path2D();
+    const s = 7;
+    p.moveTo(0, s * 0.45);
+    p.bezierCurveTo(-s * 0.1, s * 0.15, -s,       -s * 0.35, -s,      -s * 0.05);
+    p.bezierCurveTo(-s,       -s * 0.7,  -s * 0.3, -s,         0,       -s * 0.3);
+    p.bezierCurveTo( s * 0.3, -s,         s,        -s * 0.7,   s,       -s * 0.05);
+    p.bezierCurveTo( s,        s * 0.15,  s * 0.1,  s * 0.15,  0,        s * 0.45);
+    p.closePath();
+    return p;
+  }
+  const PAW_PATH = buildHeartPath();
+
+  /* Stamp pool — reuse objects, never allocate inside rAF */
+  const stamps = [];
+  for (let i = 0; i < POOL_SIZE; i++) {
+    stamps.push({ x: 0, y: 0, angle: 0, alpha: 0, side: 0 });
+  }
+  let poolHead = 0;
+
+  /* Track last stamped position to throttle by distance */
+  let _lastStampX = -999, _lastStampY = -999;
+  let _stepCount  = 0;
+
+  /* Public: called by applyXY whenever cat moves */
+  function stampPaw(x, y, angleDeg) {
+    const dx = x - _lastStampX, dy = y - _lastStampY;
+    if (dx*dx + dy*dy < STEP_DIST*STEP_DIST) return;
+    _lastStampX = x; _lastStampY = y;
+    _stepCount++;
+
+    const rad  = (angleDeg || 0) * Math.PI / 180;
+
+    /* Alternate left / right paw — lateral offset perpendicular to heading */
+    const side  = _stepCount % 2 === 0 ? -1 : 1;
+    const perpX = -Math.sin(rad) * side * 9;
+    const perpY =  Math.cos(rad) * side * 9;
+
+    const s = stamps[poolHead % POOL_SIZE];
+    poolHead++;
+    /* Stamp AT cat's current position — trail forms naturally as cat moves away */
+    s.x     = x + 40 + perpX;
+    s.y     = y + 68 + perpY;
+    s.angle = angleDeg || 0;
+    s.alpha = 0.5;
+    s.side  = side;
+  }
+  window._catStampPaw = stampPaw;
+
+  /* ── Heart colour: blush/pink from cat palette ── */
+  function getPawColor() {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue('--cat-blush').trim() || '#ff88aa';
+  }
+
+  /* ── Render loop — runs on its own rAF, separate from cat loop ── */
+  let anyActive = false;
+  function renderPaws(ts) {
+    anyActive = stamps.some(s => s.alpha > 0.004);
+
+    if (anyActive) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const color = getPawColor();
+
+      for (let i = 0; i < POOL_SIZE; i++) {
+        const s = stamps[i];
+        if (s.alpha <= 0.004) continue;
+
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.angle * Math.PI / 180);
+        ctx.scale(PAW_SCALE, PAW_SCALE);
+        ctx.fillStyle = color;
+        ctx.fill(PAW_PATH);
+        ctx.restore();
+
+        s.alpha -= FADE_RATE;
+        if (s.alpha < 0) s.alpha = 0;
+      }
+    }
+    requestAnimationFrame(renderPaws);
+  }
+  requestAnimationFrame(renderPaws);
+})();
+</script>
+<!-- ===== END PAW PRINT CANVAS ===== -->
+
 <script>
 /* ══ CAT WIDGET CORE ══ */
 (function(){
@@ -2194,7 +2441,8 @@ document.body.addEventListener('click', function initAudio() {
 
   /* ── Blink ── */
   function catBlink() {
-    eyes.forEach(e => {
+    /* All cat-eye-group elements: SVG + overlay */
+    cat.querySelectorAll('.cat-eye-group').forEach(e => {
       e.classList.remove('blink-fast');
       void e.offsetWidth;
       e.classList.add('blink-fast');
@@ -2207,7 +2455,7 @@ document.body.addEventListener('click', function initAudio() {
   function showEmotion(emoji, duration) {
     emotionEl.textContent = emoji;
     emotionEl.classList.add('show');
-    setTimeout(() => emotionEl.classList.remove('show'), duration || 3000);
+     setTimeout(() => emotionEl.classList.remove('show'), duration || 40000);
   }
 
   /* ── Random cute emotions ── */
@@ -2290,7 +2538,29 @@ document.body.addEventListener('click', function initAudio() {
     return direction === 1 ? edgeToXY(e, f) : edgeToXYCCW(e, f);
   }
 
-  function applyXY(x,y){ cat.style.left=x+'px'; cat.style.top=y+'px'; cat.style.right=''; cat.style.bottom=''; }
+  function applyXY(x,y){
+    cat.style.left=x+'px'; cat.style.top=y+'px'; cat.style.right=''; cat.style.bottom='';
+    /* ── Paw prints: derive walk angle from cat's current edge/direction ── */
+    if (window._catStampPaw && (isWalking || isStraying)) {
+      /* Approximate heading angle in degrees */
+      let angleDeg = 0;
+      if (!isStraying) {
+        // edge-based angle for border walk
+        const edgeN = ((edge % 4) + 4) % 4;
+        if (direction === 1) {
+          angleDeg = [180, 270, 0, 90][edgeN]; // CW: bottom→left, left→up, top→right, right→down
+        } else {
+          angleDeg = [0, 90, 180, 270][edgeN]; // CCW
+        }
+      } else {
+        // stray: angle toward destination
+        const tx = strayPhase === 'going' ? strayX : strayFromX;
+        const ty = strayPhase === 'going' ? strayY : strayFromY;
+        angleDeg = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
+      }
+      window._catStampPaw(x, y, angleDeg);
+    }
+  }
 
   function updateFace(e) {
     if (direction === 1) {
@@ -2329,6 +2599,7 @@ document.body.addEventListener('click', function initAudio() {
   }
 
   function tickStray(ts) {
+    if (window._catFrozen) { animId = requestAnimationFrame(tickStray); return; }
     if (!lastTime) { lastTime = ts; animId = requestAnimationFrame(tickStray); return; }
     const dt = Math.min((ts-lastTime)/1000, 0.1); lastTime = ts;
     const straySpeed = SPEED * 0.8;
@@ -2371,6 +2642,7 @@ document.body.addEventListener('click', function initAudio() {
 
   /* ── Normal walk tick ── */
   function tick(ts){
+    if (window._catFrozen) { animId = requestAnimationFrame(tick); return; }
     if(!lastTime){lastTime=ts; animId=requestAnimationFrame(tick); return;}
     const dt=Math.min((ts-lastTime)/1000,0.1); lastTime=ts;
     if(isWalking && !isStraying){
@@ -2411,27 +2683,25 @@ document.body.addEventListener('click', function initAudio() {
 
 /* ══ CAT SETTINGS PANEL ══ */
 const CAT_COLORS = {
-  black:  {fur:'#2a2a2a', stroke:'#111111', tummy:'#555555', ear:'#9966aa', eye:'#6abfe8', nose:'#f07070', blush:'#9966aa'},
-  white:  {fur:'#f5f0eb', stroke:'#c8b0a0', tummy:'#fff5f0', ear:'#f5a0a8', eye:'#a0c8e8', nose:'#f07070', blush:'#f5a0a8'},
-  orange: {fur:'#fcd4a0', stroke:'#e8996a', tummy:'#fff5e8', ear:'#f5a0a8', eye:'#6abfe8', nose:'#f07070', blush:'#f5a0a8'},
-  red:    {fur:'#e87070', stroke:'#c03030', tummy:'#ffe0e0', ear:'#ffb0b0', eye:'#5555cc', nose:'#880000', blush:'#ffb0b0'},
-  blue:   {fur:'#70a8e8', stroke:'#2060c0', tummy:'#e0eeff', ear:'#b0d0ff', eye:'#ffe066', nose:'#4488cc', blush:'#b0d0ff'},
-  green:  {fur:'#70c880', stroke:'#2a8040', tummy:'#e0ffea', ear:'#b0f0c0', eye:'#ffe066', nose:'#226633', blush:'#b0f0c0'},
-  yellow: {fur:'#ffe066', stroke:'#c89020', tummy:'#fffbe0', ear:'#ffd0a0', eye:'#70a8e8', nose:'#c87020', blush:'#ffd0a0'},
-  brown:  {fur:'#a0724a', stroke:'#5a3820', tummy:'#f5e8d8', ear:'#d4a070', eye:'#6abfe8', nose:'#4a2010', blush:'#d4a070'},
-  gray:   {fur:'#c8c8d0', stroke:'#7a7a8a', tummy:'#f0f0f5', ear:'#e0a0b0', eye:'#6abfe8', nose:'#f07070', blush:'#e0a0b0'},
-  silver:   {fur:'#d0d0dc', stroke:'#8888a0', tummy:'#f0f0f8', ear:'#f0b8c8', eye:'#88ccee', nose:'#f07070', blush:'#f0b8c8'},
-  void:     {fur:'#1e1e2a', stroke:'#444466', tummy:'#2a2a3a', ear:'#8844aa', eye:'#aa66ff', nose:'#cc77ee', blush:'#8844aa'},
-  peach:    {fur:'#ffddc8', stroke:'#e8996a', tummy:'#fff5ee', ear:'#ff9aaa', eye:'#66bb88', nose:'#f07070', blush:'#ff9aaa'},
-  teal:     {fur:'#5cb8b2', stroke:'#2a7a75', tummy:'#e0faf8', ear:'#ffd080', eye:'#ffe066', nose:'#ff7755', blush:'#ffd080'},
-  lavender: {fur:'#c8aaee', stroke:'#8855cc', tummy:'#f0eaff', ear:'#ff9aaa', eye:'#ff88aa', nose:'#cc55aa', blush:'#ff9aaa'},
-  caramel:  {fur:'#c8915a', stroke:'#7a4a20', tummy:'#fff0e0', ear:'#ffe0a0', eye:'#44aa66', nose:'#aa5522', blush:'#ffe0a0'},
-  rosegold: {fur:'#e8a898', stroke:'#b06050', tummy:'#fff0ee', ear:'#cc6688', eye:'#6688cc', nose:'#cc4466', blush:'#cc6688'},
-  sage:     {fur:'#88aa78', stroke:'#445533', tummy:'#eefae8', ear:'#ffe0a0', eye:'#cc8833', nose:'#558833', blush:'#ffe0a0'},
+  cream:      {fur:'#F8F4E8', stroke:'#c8b098', tummy:'#fffdf5', ear:'#f5c0b0', eye:'#7ab8d8', nose:'#e08878', blush:'#f5c0b0'},
+  snow:       {fur:'#FFFFFF', stroke:'#d0c0b8', tummy:'#f8f8ff', ear:'#ffb8c8', eye:'#88bbdd', nose:'#e07878', blush:'#ffb8c8'},
+  britgray:   {fur:'#8A8F98', stroke:'#50555e', tummy:'#d8dce5', ear:'#c8a8b8', eye:'#c8d8e8', nose:'#e07878', blush:'#c8a8b8'},
+  bluesmoke:  {fur:'#6E7F80', stroke:'#3a4e50', tummy:'#c8d8da', ear:'#b8c8d0', eye:'#e8d870', nose:'#e07060', blush:'#b8c8d0'},
+  ginger:     {fur:'#D97B2D', stroke:'#8a4010', tummy:'#fce0b8', ear:'#f5b898', eye:'#4488aa', nose:'#c04010', blush:'#f5b898'},
+  honey:      {fur:'#C98E39', stroke:'#7a5015', tummy:'#f8e8b0', ear:'#f0c880', eye:'#4a90a8', nose:'#b06020', blush:'#f0c880'},
+  choco:      {fur:'#5A3A29', stroke:'#2a1808', tummy:'#c8a888', ear:'#a07858', eye:'#88bbcc', nose:'#3a1808', blush:'#a07858'},
+  midnight:   {fur:'#111111', stroke:'#000000', tummy:'#383838', ear:'#7744aa', eye:'#55aaee', nose:'#e05050', blush:'#7744aa'},
+  charcoal:   {fur:'#2B2B2B', stroke:'#111111', tummy:'#505050', ear:'#886699', eye:'#66bbdd', nose:'#e06060', blush:'#886699'},
+  silver:     {fur:'#C0C0C0', stroke:'#808090', tummy:'#f0f0f8', ear:'#e8b0c8', eye:'#88aacc', nose:'#e07878', blush:'#e8b0c8'},
+  lilac:      {fur:'#B9A7B3', stroke:'#7a6070', tummy:'#ede0ee', ear:'#dda8c8', eye:'#aa88cc', nose:'#cc6688', blush:'#dda8c8'},
+  bluecream:  {fur:'#9FA8B2', stroke:'#5a6878', tummy:'#dde5ee', ear:'#c8d0e0', eye:'#e8d060', nose:'#cc7060', blush:'#c8d0e0'},
+  cinnamon:   {fur:'#8B5A3C', stroke:'#4a2818', tummy:'#e8c8a8', ear:'#d4a070', eye:'#5599aa', nose:'#883018', blush:'#d4a070'},
+  fawn:       {fur:'#C9AE9B', stroke:'#8a6a55', tummy:'#f5ede5', ear:'#e8c0b0', eye:'#7aaabb', nose:'#c08070', blush:'#e8c0b0'},
+  chinchilla: {fur:'#C9A76A', stroke:'#7a5c20', tummy:'#f8ecc8', ear:'#f0d090', eye:'#4a8899', nose:'#b06830', blush:'#f0d090'},
 };
 
 let catVisible = true;
-let currentColor = localStorage.getItem('cat-color') || 'orange';
+let currentColor = localStorage.getItem('cat-color') || 'ginger';
 let currentSpeed = parseInt(localStorage.getItem('cat-speed') || '55');
 
 function applyColorPreset(name) {
@@ -2454,14 +2724,14 @@ function setCatColor(name) {
   document.querySelectorAll('.cat-color-btn').forEach(b => {
     b.classList.toggle('active-color', b.getAttribute('onclick').includes("'"+name+"'"));
   });
-  // Cập nhật lại skin nếu đang dùng skin image (reaper/ragdoll/tabby)
+  // Re-inject skin SVG with new colors if currently using a skin
   if (typeof currentSkin !== 'undefined' && currentSkin && currentSkin !== 'default') {
-    const imgEl = document.getElementById('cat-img-skin');
-    if (imgEl) {
-      const c = CAT_COLORS[name] || null;
-      if (currentSkin === 'reaper')  imgEl.src = buildReaperSVG(c);
-      if (currentSkin === 'ragdoll') imgEl.src = buildRagdollSVG(c);
-      if (currentSkin === 'tabby')   imgEl.src = buildTabbySVG(c);
+    const skinContainer = document.getElementById('cat-svg-skin');
+    const c2 = CAT_COLORS[name] || null;
+    if (skinContainer) {
+      if (currentSkin === 'reaper')  skinContainer.innerHTML = buildReaperSVG(c2);
+      if (currentSkin === 'ragdoll') skinContainer.innerHTML = buildRagdollSVG(c2);
+      if (currentSkin === 'tabby')   skinContainer.innerHTML = buildTabbySVG(c2);
     }
   }
 }
@@ -2485,7 +2755,7 @@ function buildReaperSVG(c) {
   const nose = c ? c.nose : '#f07070';
   const blush = c ? c.blush : '#f5a0a8';
   const stroke = c ? c.stroke : '#c8a070';
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg width="80" height="80" viewBox="-10 0 100 80" xmlns="http://www.w3.org/2000/svg">
+  return `<svg width="80" height="80" viewBox="-10 0 100 80" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">\n<style>.r-scythe{transform-box:fill-box;transform-origin:40px  69px;animation:cat-scythe 2.2s ease-in-out infinite}.r-tail{transform-origin:40px 62px;animation:cat-tail 1.4s ease-in-out infinite}.r-eye{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite}.r-eye2{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite;animation-delay:0.09s}.r-paw-l{transform-box:fill-box;transform-origin:50% 0%}.r-paw-r{transform-box:fill-box;transform-origin:50% 0%}#cat-widget.walking .r-paw-l{animation:cat-walk-l 0.55s ease-in-out infinite}#cat-widget.walking .r-paw-r{animation:cat-walk-r 0.55s ease-in-out infinite}.r-blade{transform-box:fill-box;transform-origin:72px 4px;transform:rotate(45deg)}</style>
   <defs>
     <linearGradient id="shaftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%"   stop-color="#0d0d0d"/>
@@ -2516,7 +2786,11 @@ function buildReaperSVG(c) {
     </linearGradient>
   </defs>
 
-  <!-- ═══ SHAFT: diagonal pole top-right to bottom-left ═══ -->
+  <!-- ═══ SCYTHE: shaft + blade — animated swing, pivot at pommel ═══ -->
+  <!-- outer-g: mirrors + scales to 70% BEFORE CSS animation touches anything -->
+  <g transform="translate(40,69) scale(-0.7,0.7) translate(-40,-69)">
+  <g class="r-scythe">
+  <!-- SHAFT: diagonal pole top-right to bottom-left -->
   <line x1="10" y1="69" x2="76" y2="1" stroke="url(#shaftGrad)" stroke-width="5" stroke-linecap="round"/>
   <!-- Shaft highlight -->
   <line x1="10.8" y1="68" x2="76.8" y2="0" stroke="rgba(255,255,255,0.09)" stroke-width="1.5" stroke-linecap="round"/>
@@ -2526,57 +2800,30 @@ function buildReaperSVG(c) {
   <ellipse cx="10" cy="69" rx="4.5" ry="3" fill="#1e1e1e" stroke="#555" stroke-width="1" transform="rotate(-50 10 69)"/>
   <ellipse cx="10" cy="69" rx="2" ry="1.3" fill="#444" transform="rotate(-50 10 69)"/>
 
-  <!-- ═══ BRACKET at blade-shaft junction ═══ -->
+  <!-- BRACKET at blade-shaft junction -->
   <ellipse cx="72" cy="4" rx="6" ry="4.5" fill="#181820" stroke="#555" stroke-width="0.9" transform="rotate(-50 72 4)"/>
   <circle  cx="72" cy="4" r="2.2" fill="#cc1133" opacity="0.95"/>
   <circle  cx="72" cy="4" r="1"   fill="#ff4466" opacity="0.8"/>
-
-  <!-- ═══ BLADE: sharp, thin, crescent — reads clearly at 80px ═══ -->
-  <!-- Shadow / depth layer behind blade -->
-  <path d="M 72,6
-           C 58,0  34,-2  10,16
-           C -2,26 -5,40  2,52
-           C 5,46  10,36  24,24
-           C 40,11 60,5   72,9
-           Z"
-        fill="rgba(0,0,20,0.55)"/>
-
-  <!-- Dark iron spine (back of blade) -->
-  <path d="M 72,5
-           C 58,-1 33,-3  9,16
-           C -2,27 -6,41  1,53
-           C 8,42  18,30  33,21
-           C 50,11 62,5   72,9
-           Z"
-        fill="url(#ironSpineR)"/>
-
-  <!-- Bright steel cutting edge — thin crescent that gleams -->
-  <path d="M 72,4
-           C 58,-2 32,-5  8,15
-           C -4,27 -7,42  0,54
-           C 4,47  12,36  28,23
-           C 46,10 62,3   72,8
-           Z"
-        fill="url(#steelEdgeR)" opacity="0.92"/>
-
-  <!-- Aura glow on blade -->
-  <path d="M 72,4 C 55,-4 28,-6 5,16 C -8,28 -8,44 1,54 C 10,40 26,22 50,10 C 62,4 70,2 72,4 Z"
-        fill="url(#bladeAura)"/>
-
-  <!-- Spine groove — the dark line along the back edge (makes blade pop) -->
-  <path d="M 1,53 C 10,41 22,29 38,20 C 52,12 63,7 72,8"
-        fill="none" stroke="#04040a" stroke-width="2.2" stroke-linecap="round"/>
-  <!-- Edge highlight — the silver gleam on cutting side -->
-  <path d="M 1,52 C 10,40 22,28 38,19 C 52,11 63,6 72,7"
-        fill="none" stroke="#e8f4ff" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-  <!-- Ultra-fine razor shimmer -->
-  <path d="M 72,4 C 63,0 50,4 38,10 C 22,20 8,34 1,46"
-        fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
-  <!-- Blade tip flash -->
+  
+  <!-- BLADE: sharp crescent -->
+  <g class="r-blade">
+  <path d="M 72,6 C 58,0  34,-2  10,16 C -2,26 -5,40  2,52 C 5,46  10,36  24,24 C 40,11 60,5   72,9 Z" fill="rgba(0,0,20,0.55)"/>
+  <path d="M 72,5 C 58,-1 33,-3  9,16 C -2,27 -6,41  1,53 C 8,42  18,30  33,21 C 50,11 62,5   72,9 Z" fill="url(#ironSpineR)"/>
+  <path d="M 72,4 C 58,-2 32,-5  8,15 C -4,27 -7,42  0,54 C 4,47  12,36  28,23 C 46,10 62,3   72,8 Z" fill="url(#steelEdgeR)" opacity="0.92"/>
+  <path d="M 72,4 C 55,-4 28,-6 5,16 C -8,28 -8,44 1,54 C 10,40 26,22 50,10 C 62,4 70,2 72,4 Z" fill="url(#bladeAura)"/>
+  <path d="M 1,53 C 10,41 22,29 38,20 C 52,12 63,7 72,8" fill="none" stroke="#04040a" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M 1,52 C 10,40 22,28 38,19 C 52,11 63,6 72,7" fill="none" stroke="#e8f4ff" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 72,4 C 63,0 50,4 38,10 C 22,20 8,34 1,46" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
   <path d="M 72,4 C 68,1 63,1 60,2 C 64,0 69,1 72,4 Z" fill="#ffffff" opacity="0.65"/>
-  <!-- Inner crescent shadow (gives thickness illusion) -->
-  <path d="M 2,51 C 12,40 25,28 40,19 C 54,12 64,8 72,9"
-        fill="none" stroke="#ffffff" stroke-width="0.4" opacity="0.22"/>
+  <path d="M 2,51 C 12,40 25,28 40,19 C 54,12 64,8 72,9" fill="none" stroke="#ffffff" stroke-width="0.4" opacity="0.22"/>
+  </g>
+  </g>
+  </g>
+  <!-- Tail (peeks from under robe) — animated -->
+  <g class="cat-tail" style="transform-origin:40px 62px">
+    <path d="M40 62 Q20 70 14 58 Q8 46 22 44" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round"/>
+    <path d="M40 62 Q20 70 14 58 Q8 46 22 44" fill="none" stroke="#2a2a2a" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+  </g>
 
   <!-- ═══ ROBE body ═══ -->
   <path d="M16 46 Q14 72 24 76 L56 76 Q66 72 64 46 Z" fill="#1c1c1c"/>
@@ -2594,19 +2841,23 @@ function buildReaperSVG(c) {
   <polygon points="27.5,21 25.5,15 32,19" fill="${ear}" opacity="0.7"/>
   <polygon points="52.5,21 54.5,15 48,19" fill="${ear}" opacity="0.7"/>
 
-  <!-- Eyes -->
-  <circle cx="34" cy="33" r="6.5" fill="white"/>
-  <circle cx="34" cy="33" r="6.5" fill="none" stroke="${stroke}" stroke-width="0.8"/>
-  <ellipse cx="34" cy="34" rx="4.2" ry="4.8" fill="${eye}"/>
-  <ellipse cx="34" cy="34" rx="2.6" ry="3" fill="#0d0d1a"/>
-  <circle cx="35.8" cy="31.5" r="1.4" fill="white"/>
-  <circle cx="33" cy="35.5" r="0.7" fill="white" opacity="0.7"/>
-  <circle cx="46" cy="33" r="6.5" fill="white"/>
-  <circle cx="46" cy="33" r="6.5" fill="none" stroke="${stroke}" stroke-width="0.8"/>
-  <ellipse cx="46" cy="34" rx="4.2" ry="4.8" fill="${eye}"/>
-  <ellipse cx="46" cy="34" rx="2.6" ry="3" fill="#0d0d1a"/>
-  <circle cx="47.8" cy="31.5" r="1.4" fill="white"/>
-  <circle cx="45" cy="35.5" r="0.7" fill="white" opacity="0.7"/>
+  <!-- Eyes — animated blink -->
+  <g class="r-eye cat-eye-group">
+    <circle cx="34" cy="33" r="6.5" fill="white"/>
+    <circle cx="34" cy="33" r="6.5" fill="none" stroke="${stroke}" stroke-width="0.8"/>
+    <ellipse cx="34" cy="34" rx="4.2" ry="4.8" fill="${eye}"/>
+    <ellipse cx="34" cy="34" rx="2.6" ry="3" fill="#0d0d1a"/>
+    <circle cx="35.8" cy="31.5" r="1.4" fill="white"/>
+    <circle cx="33" cy="35.5" r="0.7" fill="white" opacity="0.7"/>
+  </g>
+  <g class="r-eye2 cat-eye-group">
+    <circle cx="46" cy="33" r="6.5" fill="white"/>
+    <circle cx="46" cy="33" r="6.5" fill="none" stroke="${stroke}" stroke-width="0.8"/>
+    <ellipse cx="46" cy="34" rx="4.2" ry="4.8" fill="${eye}"/>
+    <ellipse cx="46" cy="34" rx="2.6" ry="3" fill="#0d0d1a"/>
+    <circle cx="47.8" cy="31.5" r="1.4" fill="white"/>
+    <circle cx="45" cy="35.5" r="0.7" fill="white" opacity="0.7"/>
+  </g>
 
   <!-- Nose + Mouth -->
   <path d="M38 40 L40 42.5 L42 40 Q40 38 38 40Z" fill="${nose}"/>
@@ -2627,14 +2878,18 @@ function buildReaperSVG(c) {
   <path d="M18 54 Q4 60 5 69 Q10 73 18 65 Q20 59 22 54 Z" fill="#1c1c1c"/>
   <ellipse cx="7" cy="69" rx="5" ry="3.5" fill="#141414" stroke="#444" stroke-width="0.7" transform="rotate(-30 7 69)"/>
 
-  <!-- Feet -->
-  <ellipse cx="30" cy="76" rx="8" ry="4.5" fill="#222" stroke="#333" stroke-width="0.8"/>
-  <ellipse cx="50" cy="76" rx="8" ry="4.5" fill="#222" stroke="#333" stroke-width="0.8"/>
-  <ellipse cx="28" cy="77.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="31.5" cy="79.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="48" cy="77.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="51.5" cy="79.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
-</svg>`)}`;
+  <!-- Feet — animated walk -->
+  <g class="r-paw-l paw-left">
+    <ellipse cx="30" cy="76" rx="8" ry="4.5" fill="#222" stroke="#333" stroke-width="0.8"/>
+    <ellipse cx="28" cy="77.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="31.5" cy="79.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
+  </g>
+  <g class="r-paw-r paw-right">
+    <ellipse cx="50" cy="76" rx="8" ry="4.5" fill="#222" stroke="#333" stroke-width="0.8"/>
+    <ellipse cx="48" cy="77.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="51.5" cy="79.5" rx="2.2" ry="1.5" fill="${ear}" opacity="0.55"/>
+  </g>
+</svg>`;
 }
 
 function buildRagdollSVG(c) {
@@ -2644,80 +2899,78 @@ function buildRagdollSVG(c) {
   const nose = c ? c.nose : '#e07070';
   const blush = c ? c.blush : '#f5c0b0';
   const stroke = c ? c.stroke : '#d0b8a8';
-  // Compute a darker shade for face mask
   const maskR = Math.max(0, parseInt(fur.slice(1,3),16) - 60);
   const maskG = Math.max(0, parseInt(fur.slice(3,5),16) - 70);
   const maskB = Math.max(0, parseInt(fur.slice(5,7),16) - 60);
   const mask = `rgb(${maskR},${maskG},${maskB})`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Fluffy tail (double-layer for fluff) -->
-  <path d="M40 64 Q18 74 12 60 Q6 46 22 46" fill="none" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
-  <path d="M40 64 Q18 74 12 60 Q6 46 22 46" fill="none" stroke="${fur}" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
-  <!-- Fluff tufts on tail -->
-  <path d="M28 70 Q22 66 20 58" fill="none" stroke="${fur}" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-  <path d="M33 71 Q25 68 22 62" fill="none" stroke="${fur}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  return `<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+<style>.rd-tail{transform-origin:40px 64px;animation:cat-tail 1.4s ease-in-out infinite}.rd-eye{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite}.rd-eye2{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite;animation-delay:0.09s}.rd-paw-l{transform-box:fill-box;transform-origin:50% 0%}.rd-paw-r{transform-box:fill-box;transform-origin:50% 0%}#cat-widget.walking .rd-paw-l{animation:cat-walk-l 0.55s ease-in-out infinite}#cat-widget.walking .rd-paw-r{animation:cat-walk-r 0.55s ease-in-out infinite}</style>
+  <!-- Fluffy tail — animated -->
+  <g class="rd-tail cat-tail">
+    <path d="M40 64 Q18 74 12 60 Q6 46 22 46" fill="none" stroke="${stroke}" stroke-width="8" stroke-linecap="round"/>
+    <path d="M40 64 Q18 74 12 60 Q6 46 22 46" fill="none" stroke="${fur}" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+    <path d="M28 70 Q22 66 20 58" fill="none" stroke="${fur}" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M33 71 Q25 68 22 62" fill="none" stroke="${fur}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  </g>
   <!-- Body -->
   <ellipse cx="40" cy="58" rx="21" ry="17" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <!-- Body fluff lines -->
   <path d="M26 52 Q30 48 34 52" fill="none" stroke="${fur}" stroke-width="3" opacity="0.7"/>
   <path d="M44 52 Q48 48 52 52" fill="none" stroke="${fur}" stroke-width="3" opacity="0.7"/>
-  <!-- White tummy -->
   <ellipse cx="40" cy="60" rx="13" ry="11" fill="white" opacity="0.92"/>
-  <!-- Chest ruff (fluffy collar) -->
   <path d="M30 50 Q33 44 36 50 Q38 44 40 50 Q42 44 44 50 Q47 44 50 50" fill="none" stroke="${fur}" stroke-width="3.5" stroke-linecap="round" opacity="0.8"/>
   <path d="M30 50 Q33 44 36 50 Q38 44 40 50 Q42 44 44 50 Q47 44 50 50" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-  <!-- Head (large, round) -->
+  <!-- Head -->
   <circle cx="40" cy="33" r="21" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <!-- Fluffy head fur lines -->
   <path d="M24 22 Q27 18 30 22" fill="none" stroke="${fur}" stroke-width="2.5" opacity="0.6"/>
   <path d="M50 22 Q53 18 56 22" fill="none" stroke="${fur}" stroke-width="2.5" opacity="0.6"/>
-  <!-- Dark face mask -->
   <ellipse cx="40" cy="35" rx="14" ry="12" fill="${mask}" opacity="0.7"/>
-  <!-- Ears (fluffy, layered) -->
+  <!-- Ears -->
   <polygon points="22,18 17,3 33,15" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
   <polygon points="23,17 19,6 31,15" fill="${ear}" opacity="0.75"/>
   <polygon points="58,18 63,3 47,15" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
   <polygon points="57,17 61,6 49,15" fill="${ear}" opacity="0.75"/>
-  <!-- Ear fluff -->
   <path d="M19 12 Q21 8 25 12" fill="none" stroke="${fur}" stroke-width="2" opacity="0.7"/>
   <path d="M55 12 Q57 8 61 12" fill="none" stroke="${fur}" stroke-width="2" opacity="0.7"/>
-  <!-- Eyes (large, expressive blue) -->
-  <circle cx="33" cy="32" r="8" fill="white" stroke="${stroke}" stroke-width="0.7"/>
-  <ellipse cx="33" cy="33" rx="5.2" ry="5.8" fill="${eye}"/>
-  <ellipse cx="33" cy="33" rx="3.3" ry="3.8" fill="#0e1a2e"/>
-  <circle cx="35.2" cy="30.2" r="1.6" fill="white"/>
-  <circle cx="32" cy="35" r="0.8" fill="white" opacity="0.7"/>
-  <circle cx="47" cy="32" r="8" fill="white" stroke="${stroke}" stroke-width="0.7"/>
-  <ellipse cx="47" cy="33" rx="5.2" ry="5.8" fill="${eye}"/>
-  <ellipse cx="47" cy="33" rx="3.3" ry="3.8" fill="#0e1a2e"/>
-  <circle cx="49.2" cy="30.2" r="1.6" fill="white"/>
-  <circle cx="46" cy="35" r="0.8" fill="white" opacity="0.7"/>
-  <!-- Eyelash arches (feminine cute) -->
+  <!-- Eyes — animated blink -->
+  <g class="rd-eye cat-eye-group">
+    <circle cx="33" cy="32" r="8" fill="white" stroke="${stroke}" stroke-width="0.7"/>
+    <ellipse cx="33" cy="33" rx="5.2" ry="5.8" fill="${eye}"/>
+    <ellipse cx="33" cy="33" rx="3.3" ry="3.8" fill="#0e1a2e"/>
+    <circle cx="35.2" cy="30.2" r="1.6" fill="white"/>
+    <circle cx="32" cy="35" r="0.8" fill="white" opacity="0.7"/>
+  </g>
+  <g class="rd-eye2 cat-eye-group">
+    <circle cx="47" cy="32" r="8" fill="white" stroke="${stroke}" stroke-width="0.7"/>
+    <ellipse cx="47" cy="33" rx="5.2" ry="5.8" fill="${eye}"/>
+    <ellipse cx="47" cy="33" rx="3.3" ry="3.8" fill="#0e1a2e"/>
+    <circle cx="49.2" cy="30.2" r="1.6" fill="white"/>
+    <circle cx="46" cy="35" r="0.8" fill="white" opacity="0.7"/>
+  </g>
   <path d="M26 25 Q27.5 22 30 25" fill="none" stroke="#5a3020" stroke-width="1.3" stroke-linecap="round"/>
   <path d="M40 24 Q42 21 45 24" fill="none" stroke="#5a3020" stroke-width="1.3" stroke-linecap="round"/>
-  <!-- Nose -->
   <path d="M38 39 L40 41.5 L42 39 Q40 37.5 38 39Z" fill="${nose}"/>
-  <!-- Mouth (cute smile) -->
   <path d="M40 41.5 Q37 44.5 35 43.5" fill="none" stroke="${nose}" stroke-width="1.2" stroke-linecap="round"/>
   <path d="M40 41.5 Q43 44.5 45 43.5" fill="none" stroke="${nose}" stroke-width="1.2" stroke-linecap="round"/>
-  <!-- Whiskers -->
   <line x1="17" y1="38" x2="32" y2="40" stroke="${stroke}" stroke-width="1" opacity="0.7"/>
   <line x1="15" y1="41.5" x2="32" y2="42" stroke="${stroke}" stroke-width="1" opacity="0.7"/>
   <line x1="17" y1="45" x2="32" y2="44" stroke="${stroke}" stroke-width="1" opacity="0.6"/>
   <line x1="63" y1="38" x2="48" y2="40" stroke="${stroke}" stroke-width="1" opacity="0.7"/>
   <line x1="65" y1="41.5" x2="48" y2="42" stroke="${stroke}" stroke-width="1" opacity="0.7"/>
   <line x1="63" y1="45" x2="48" y2="44" stroke="${stroke}" stroke-width="1" opacity="0.6"/>
-  <!-- Blush -->
   <ellipse cx="27" cy="41" rx="5.5" ry="3.2" fill="${blush}" opacity="0.5"/>
   <ellipse cx="53" cy="41" rx="5.5" ry="3.2" fill="${blush}" opacity="0.5"/>
-  <!-- Paws (dark points) -->
-  <ellipse cx="30" cy="70" rx="10" ry="6.5" fill="${mask}" stroke="${stroke}" stroke-width="0.8"/>
-  <ellipse cx="50" cy="70" rx="10" ry="6.5" fill="${mask}" stroke="${stroke}" stroke-width="0.8"/>
-  <ellipse cx="27.5" cy="71.5" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="31.5" cy="74" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="47.5" cy="71.5" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="51.5" cy="74" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
-</svg>`)}`;
+  <!-- Paws — animated walk -->
+  <g class="rd-paw-l paw-left">
+    <ellipse cx="30" cy="70" rx="10" ry="6.5" fill="${mask}" stroke="${stroke}" stroke-width="0.8"/>
+    <ellipse cx="27.5" cy="71.5" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="31.5" cy="74" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
+  </g>
+  <g class="rd-paw-r paw-right">
+    <ellipse cx="50" cy="70" rx="10" ry="6.5" fill="${mask}" stroke="${stroke}" stroke-width="0.8"/>
+    <ellipse cx="47.5" cy="71.5" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="51.5" cy="74" rx="2.8" ry="2" fill="${ear}" opacity="0.55"/>
+  </g>
+</svg>`;
 }
 
 function buildTabbySVG(c) {
@@ -2727,32 +2980,30 @@ function buildTabbySVG(c) {
   const nose = c ? c.nose : '#d07878';
   const blush = c ? c.blush : '#e8a0a0';
   const stroke = c ? c.stroke : '#777060';
-  // stripe is a darkened version of fur
   const sR = Math.max(0, parseInt((fur+'000000').slice(1,3),16) - 45);
   const sG = Math.max(0, parseInt((fur+'000000').slice(3,5),16) - 45);
   const sB = Math.max(0, parseInt((fur+'000000').slice(5,7),16) - 40);
   const stripe = `rgb(${sR},${sG},${sB})`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Tail with stripes -->
-  <path d="M40 62 Q20 72 14 58 Q8 46 22 44" fill="none" stroke="${fur}" stroke-width="7" stroke-linecap="round"/>
-  <path d="M37 63 Q24 68 18 60" fill="none" stroke="${stripe}" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
-  <path d="M34 65 Q22 68 17 58" fill="none" stroke="${stripe}" stroke-width="1.5" opacity="0.45" stroke-linecap="round"/>
+  return `<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+<style>.tb-tail{transform-origin:40px 62px;animation:cat-tail 1.4s ease-in-out infinite}.tb-eye{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite}.tb-eye2{transform-box:fill-box;transform-origin:50% 50%;animation:cat-blink 3.5s ease-in-out infinite;animation-delay:0.09s}.tb-paw-l{transform-box:fill-box;transform-origin:50% 0%}.tb-paw-r{transform-box:fill-box;transform-origin:50% 0%}#cat-widget.walking .tb-paw-l{animation:cat-walk-l 0.55s ease-in-out infinite}#cat-widget.walking .tb-paw-r{animation:cat-walk-r 0.55s ease-in-out infinite}</style>
+  <!-- Tail — animated -->
+  <g class="tb-tail cat-tail">
+    <path d="M40 62 Q20 72 14 58 Q8 46 22 44" fill="none" stroke="${fur}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M37 63 Q24 68 18 60" fill="none" stroke="${stripe}" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+    <path d="M34 65 Q22 68 17 58" fill="none" stroke="${stripe}" stroke-width="1.5" opacity="0.45" stroke-linecap="round"/>
+  </g>
   <!-- Body -->
   <ellipse cx="40" cy="58" rx="20" ry="16" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <!-- Body stripes -->
   <path d="M29 50 Q40 47 51 50" fill="none" stroke="${stripe}" stroke-width="2.5" opacity="0.55"/>
   <path d="M26 56 Q40 53 54 56" fill="none" stroke="${stripe}" stroke-width="2.5" opacity="0.5"/>
   <path d="M27 63 Q40 60 53 63" fill="none" stroke="${stripe}" stroke-width="2" opacity="0.4"/>
-  <!-- Tummy cream -->
   <ellipse cx="40" cy="60" rx="11" ry="10" fill="#e8d8c0" opacity="0.85"/>
   <!-- Head -->
   <circle cx="40" cy="34" r="21" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <!-- Head forehead stripes (classic tabby M) -->
   <path d="M36 13 Q40 10 44 13" fill="none" stroke="${stripe}" stroke-width="2.2" opacity="0.6" stroke-linecap="round"/>
   <path d="M33 15.5 Q40 12 47 15.5" fill="none" stroke="${stripe}" stroke-width="1.8" opacity="0.45" stroke-linecap="round"/>
   <path d="M38 16 Q40 13 42 16" fill="none" stroke="${stripe}" stroke-width="1.4" opacity="0.4" stroke-linecap="round"/>
   <path d="M32 20 Q35 17 40 19 Q45 17 48 20" fill="none" stroke="${stripe}" stroke-width="1.6" opacity="0.5" stroke-linecap="round"/>
-  <!-- Cheek stripes -->
   <path d="M20 35 Q24 33 26 38" fill="none" stroke="${stripe}" stroke-width="1.4" opacity="0.45" stroke-linecap="round"/>
   <path d="M60 35 Q56 33 54 38" fill="none" stroke="${stripe}" stroke-width="1.4" opacity="0.45" stroke-linecap="round"/>
   <!-- Ears -->
@@ -2760,54 +3011,57 @@ function buildTabbySVG(c) {
   <polygon points="23,18 20,8 30,16" fill="${ear}" opacity="0.8"/>
   <polygon points="58,20 62,4 48,16" fill="${fur}" stroke="${stroke}" stroke-width="1"/>
   <polygon points="57,18 60,8 50,16" fill="${ear}" opacity="0.8"/>
-  <!-- Big round dolly eyes with lashes -->
-  <circle cx="33" cy="33" r="8.5" fill="white" stroke="${stroke}" stroke-width="0.7"/>
-  <ellipse cx="33" cy="34" rx="5.8" ry="6.2" fill="${eye}"/>
-  <ellipse cx="33" cy="34" rx="3.6" ry="4" fill="#100808"/>
-  <circle cx="35.2" cy="31" r="1.6" fill="white"/>
-  <circle cx="32" cy="36" r="0.8" fill="white" opacity="0.7"/>
-  <!-- Lashes left eye -->
-  <line x1="25.5" y1="25.5" x2="28.5" y2="29" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="28.5" y1="23.5" x2="30.5" y2="27.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="32" y1="23" x2="32.5" y2="26.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="35.5" y1="23.5" x2="34.5" y2="27" stroke="#3a2010" stroke-width="1.3" stroke-linecap="round"/>
-  <circle cx="47" cy="33" r="8.5" fill="white" stroke="${stroke}" stroke-width="0.7"/>
-  <ellipse cx="47" cy="34" rx="5.8" ry="6.2" fill="${eye}"/>
-  <ellipse cx="47" cy="34" rx="3.6" ry="4" fill="#100808"/>
-  <circle cx="49.2" cy="31" r="1.6" fill="white"/>
-  <circle cx="46" cy="36" r="0.8" fill="white" opacity="0.7"/>
-  <!-- Lashes right eye -->
-  <line x1="54.5" y1="25.5" x2="51.5" y2="29" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="51.5" y1="23.5" x2="49.5" y2="27.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="48" y1="23" x2="47.5" y2="26.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="44.5" y1="23.5" x2="45.5" y2="27" stroke="#3a2010" stroke-width="1.3" stroke-linecap="round"/>
-  <!-- Rosy cheeks -->
+  <!-- Eyes — animated blink -->
+  <g class="tb-eye cat-eye-group">
+    <circle cx="33" cy="33" r="8.5" fill="white" stroke="${stroke}" stroke-width="0.7"/>
+    <ellipse cx="33" cy="34" rx="5.8" ry="6.2" fill="${eye}"/>
+    <ellipse cx="33" cy="34" rx="3.6" ry="4" fill="#100808"/>
+    <circle cx="35.2" cy="31" r="1.6" fill="white"/>
+    <circle cx="32" cy="36" r="0.8" fill="white" opacity="0.7"/>
+    <line x1="25.5" y1="25.5" x2="28.5" y2="29" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="28.5" y1="23.5" x2="30.5" y2="27.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="32" y1="23" x2="32.5" y2="26.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="35.5" y1="23.5" x2="34.5" y2="27" stroke="#3a2010" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+  <g class="tb-eye2 cat-eye-group">
+    <circle cx="47" cy="33" r="8.5" fill="white" stroke="${stroke}" stroke-width="0.7"/>
+    <ellipse cx="47" cy="34" rx="5.8" ry="6.2" fill="${eye}"/>
+    <ellipse cx="47" cy="34" rx="3.6" ry="4" fill="#100808"/>
+    <circle cx="49.2" cy="31" r="1.6" fill="white"/>
+    <circle cx="46" cy="36" r="0.8" fill="white" opacity="0.7"/>
+    <line x1="54.5" y1="25.5" x2="51.5" y2="29" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="51.5" y1="23.5" x2="49.5" y2="27.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="48" y1="23" x2="47.5" y2="26.5" stroke="#3a2010" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="44.5" y1="23.5" x2="45.5" y2="27" stroke="#3a2010" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
   <ellipse cx="27" cy="42" rx="5.5" ry="3.2" fill="${blush}" opacity="0.48"/>
   <ellipse cx="53" cy="42" rx="5.5" ry="3.2" fill="${blush}" opacity="0.48"/>
-  <!-- Nose + smile -->
   <path d="M38 41 L40 43.5 L42 41 Q40 39.2 38 41Z" fill="${nose}"/>
   <path d="M40 43.5 Q36 47 34 46" fill="none" stroke="${nose}" stroke-width="1.3" stroke-linecap="round"/>
   <path d="M40 43.5 Q44 47 46 46" fill="none" stroke="${nose}" stroke-width="1.3" stroke-linecap="round"/>
   <path d="M37 44.5 Q40 47 43 44.5" fill="none" stroke="${nose}" stroke-width="1" stroke-linecap="round" opacity="0.55"/>
-  <!-- Whiskers -->
   <line x1="17" y1="40" x2="33" y2="42" stroke="${stroke}" stroke-width="1" opacity="0.65"/>
   <line x1="15" y1="43.5" x2="33" y2="44" stroke="${stroke}" stroke-width="1" opacity="0.65"/>
   <line x1="17" y1="47" x2="33" y2="46" stroke="${stroke}" stroke-width="1" opacity="0.55"/>
   <line x1="63" y1="40" x2="47" y2="42" stroke="${stroke}" stroke-width="1" opacity="0.65"/>
   <line x1="65" y1="43.5" x2="47" y2="44" stroke="${stroke}" stroke-width="1" opacity="0.65"/>
   <line x1="63" y1="47" x2="47" y2="46" stroke="${stroke}" stroke-width="1" opacity="0.55"/>
-  <!-- Paws with stripe toes -->
-  <ellipse cx="30" cy="70" rx="9.5" ry="5.8" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <ellipse cx="50" cy="70" rx="9.5" ry="5.8" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
-  <line x1="26" y1="67.5" x2="26" y2="72.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
-  <line x1="29.5" y1="66.5" x2="29.5" y2="73.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
-  <line x1="46" y1="67.5" x2="46" y2="72.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
-  <line x1="49.5" y1="66.5" x2="49.5" y2="73.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
-  <ellipse cx="28" cy="71.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="31.5" cy="73.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="48" cy="71.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
-  <ellipse cx="51.5" cy="73.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
-</svg>`)}`;
+  <!-- Paws — animated walk -->
+  <g class="tb-paw-l paw-left">
+    <ellipse cx="30" cy="70" rx="9.5" ry="5.8" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
+    <line x1="26" y1="67.5" x2="26" y2="72.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
+    <line x1="29.5" y1="66.5" x2="29.5" y2="73.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
+    <ellipse cx="28" cy="71.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="31.5" cy="73.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
+  </g>
+  <g class="tb-paw-r paw-right">
+    <ellipse cx="50" cy="70" rx="9.5" ry="5.8" fill="${fur}" stroke="${stroke}" stroke-width="0.8"/>
+    <line x1="46" y1="67.5" x2="46" y2="72.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
+    <line x1="49.5" y1="66.5" x2="49.5" y2="73.5" stroke="${stripe}" stroke-width="1.2" opacity="0.55"/>
+    <ellipse cx="48" cy="71.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
+    <ellipse cx="51.5" cy="73.5" rx="2.5" ry="1.8" fill="${ear}" opacity="0.55"/>
+  </g>
+</svg>`;
 }
 
 let currentSkin = localStorage.getItem('cat-skin') || 'default';
@@ -2821,21 +3075,24 @@ function setCatSkin(name) {
   currentSkin = name;
   localStorage.setItem('cat-skin', name);
   const catEl = document.getElementById('cat-widget');
-  const imgEl = document.getElementById('cat-img-skin');
+  const skinContainer = document.getElementById('cat-svg-skin');
   document.querySelectorAll('.cat-skin-btn').forEach(b => {
     const isActive = b.id === 'skin-btn-' + name;
     b.style.background = isActive ? 'var(--accent)' : 'var(--surface)';
     b.style.color = isActive ? '#fff' : 'var(--muted2)';
     b.style.borderColor = isActive ? 'var(--accent)' : 'var(--border2)';
   });
+
   if (name === 'default') {
     catEl.classList.remove('skin-image');
-    imgEl.src = '';
+    skinContainer.innerHTML = '';
   } else {
     const c = getCatColorObj();
-    if (name === 'reaper')  imgEl.src = buildReaperSVG(c);
-    if (name === 'ragdoll') imgEl.src = buildRagdollSVG(c);
-    if (name === 'tabby')   imgEl.src = buildTabbySVG(c);
+    let svgStr = '';
+    if (name === 'reaper')  svgStr = buildReaperSVG(c);
+    if (name === 'ragdoll') svgStr = buildRagdollSVG(c);
+    if (name === 'tabby')   svgStr = buildTabbySVG(c);
+    skinContainer.innerHTML = svgStr;
     catEl.classList.add('skin-image');
   }
 }
@@ -2849,6 +3106,29 @@ function toggleCatVisibility() {
   const btn = document.getElementById('catToggleBtn');
   w.style.display = catVisible ? '' : 'none';
   btn.textContent = catVisible ? 'Hide' : 'Show';
+}
+
+let catFrozen = false;
+function toggleCatFreeze() {
+  catFrozen = !catFrozen;
+  const btn = document.getElementById('catFreezeBtn');
+  /* Chỉ pause animation của 2 chân — blink/tail/float vẫn chạy bình thường */
+  document.querySelectorAll('#cat-widget .paw-left, #cat-widget .paw-right').forEach(el => {
+    el.style.animationPlayState = catFrozen ? 'paused' : '';
+  });
+  /* Flag cho tick loop dừng di chuyển vị trí */
+  window._catFrozen = catFrozen;
+  if (catFrozen) {
+    btn.style.background = 'var(--accent)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = 'var(--accent)';
+    btn.textContent = '▶ Unfreeze';
+  } else {
+    btn.style.background = 'var(--surface)';
+    btn.style.color = 'var(--muted2)';
+    btn.style.borderColor = 'var(--border2)';
+    btn.textContent = '❄️ Freeze';
+  }
 }
 
 function toggleCatPanel() {
@@ -3215,6 +3495,770 @@ function _playAutoMeow() {
 })();
 </script>
 <!-- ===== END CAT WIDGET ===== -->
+
+<!-- ===== FLAPPY BIRD MODAL ===== -->
+<div id="flappyModal">
+  <div class="flappy-modal-box">
+    <div class="flappy-modal-header">
+      <span class="flappy-modal-title">🐦 Flappy Bird</span>
+      <button class="flappy-close-btn" onclick="closeFlappyModal()">✕ Close</button>
+    </div>
+    <iframe id="flappyFrame" srcdoc="<!DOCTYPE html>
+<html lang=&quot;vi&quot;>
+<head>
+    <meta charset=&quot;UTF-8&quot; />
+    <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; />
+    <title>Flappy Bird Modern Retro</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+
+            background:
+                radial-gradient(circle at top,
+                    #1e293b 0%,
+                    #0f172a 45%,
+                    #020617 100%);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #gameCanvas {
+            border: 3px solid rgba(255,255,255,0.18);
+            border-radius: 24px;
+
+            background: #70c5ce;
+
+            image-rendering: pixelated;
+            display: block;
+
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.08),
+                0 20px 60px rgba(0,0,0,0.45),
+                0 0 80px rgba(56,189,248,0.12);
+
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id=&quot;gameCanvas&quot; width=&quot;320&quot; height=&quot;480&quot;></canvas>
+
+<script>
+
+const canvas = document.getElementById(&quot;gameCanvas&quot;);
+const ctx = canvas.getContext(&quot;2d&quot;);
+
+// --- GAME STATE ---
+let gameState = 0;
+let frames = 0;
+let score = 0;
+let highScore = localStorage.getItem(&quot;fbHighScore_original&quot;) || 0;
+
+// --- CONFIG ---
+const config = {
+    gravity: 0.17,
+    jumpPower: -4.1,
+    gameSpeed: 2,
+    pipeGap: 95,
+    pipeWidth: 52,
+    pipeInterval: 120
+};
+
+// --- GROUND ---
+const ground = {
+    x: 0,
+    y: 412,
+    height: 68,
+
+    draw() {
+
+        let patternY = this.y;
+
+        ctx.fillStyle = &quot;#53A021&quot;;
+        ctx.fillRect(0, patternY, canvas.width, 3);
+
+        ctx.fillStyle = &quot;#73BF2E&quot;;
+        ctx.fillRect(0, patternY + 3, canvas.width, 3);
+
+        ctx.fillStyle = &quot;#DED895&quot;;
+        ctx.fillRect(0, patternY + 6, canvas.width, this.height - 6);
+
+        if (gameState !== 2) {
+            this.x = (this.x - config.gameSpeed) % 12;
+        }
+
+        ctx.fillStyle = &quot;#53A021&quot;;
+
+        for (let i = this.x; i < canvas.width + 12; i += 12) {
+
+            ctx.beginPath();
+            ctx.moveTo(i, patternY + 6);
+            ctx.lineTo(i + 6, patternY + 6);
+            ctx.lineTo(i, patternY + 14);
+            ctx.closePath();
+            ctx.fill();
+        }
+    }
+};
+
+// --- BIRD ---
+const bird = {
+
+    x: 75,
+    y: 200,
+    radius: 12,
+    velocity: 0,
+    rotation: 0,
+    wingState: 0,
+    flapSpeed: 0.15,
+
+    reset() {
+
+        this.y = 200;
+        this.velocity = 0;
+        this.rotation = 0;
+        this.wingState = 0;
+    },
+
+    jump() {
+
+        this.velocity = config.jumpPower;
+        this.rotation = -0.4;
+    },
+
+    update() {
+
+        this.velocity += config.gravity;
+        this.y += this.velocity;
+
+        if (gameState === 1) {
+            this.wingState += this.flapSpeed;
+        }
+
+        if (gameState !== 0) {
+
+            if (this.velocity >= 2.5) {
+                this.rotation = Math.min(Math.PI / 2, this.rotation + 0.1);
+            }
+
+        } else {
+
+            this.y = 200 + Math.sin(frames * 0.1) * 8;
+            this.rotation = 0;
+        }
+
+        if (this.y + this.radius >= ground.y) {
+
+            this.y = ground.y - this.radius;
+
+            if (gameState === 1) {
+                endGame();
+            }
+        }
+    },
+
+    draw() {
+
+        ctx.save();
+
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = &quot;#000&quot;;
+
+        // Body
+        ctx.fillStyle = &quot;#F7D308&quot;;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Belly
+        ctx.fillStyle = &quot;#FFF&quot;;
+        ctx.beginPath();
+        ctx.arc(-2, 3, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Eye
+        ctx.fillStyle = &quot;#FFF&quot;;
+        ctx.beginPath();
+        ctx.arc(5, -4, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = &quot;#000&quot;;
+        ctx.beginPath();
+        ctx.arc(6, -4, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Beak
+        ctx.fillStyle = &quot;#F75300&quot;;
+
+        ctx.beginPath();
+        ctx.moveTo(8, -1);
+        ctx.lineTo(18, 2);
+        ctx.lineTo(8, 6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(7, 3);
+        ctx.lineTo(15, 4);
+        ctx.lineTo(7, 7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Wing
+        ctx.fillStyle = &quot;#DE9C00&quot;;
+
+        let wingOffset = Math.sin(this.wingState) * 3;
+
+        ctx.beginPath();
+        ctx.ellipse(-7, wingOffset, 6, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+    }
+};
+
+// --- PIPES ---
+const pipes = {
+
+    current: [],
+
+    reset() {
+        this.current = [];
+    },
+
+    create() {
+
+        let minTop = 40;
+        let maxTop = ground.y - config.pipeGap - 40;
+
+        let topHeight = Math.floor(
+            Math.random() * (maxTop - minTop + 1) + minTop
+        );
+
+        this.current.push({
+            x: canvas.width,
+            top: topHeight
+        });
+    },
+
+    update() {
+
+        if (gameState !== 1) return;
+
+        if (frames % config.pipeInterval === 0) {
+            this.create();
+        }
+
+        for (let i = 0; i < this.current.length; i++) {
+
+            let p = this.current[i];
+
+            p.x -= config.gameSpeed;
+
+            // Collision
+            if (
+                bird.x + bird.radius > p.x &amp;&amp;
+                bird.x - bird.radius < p.x + config.pipeWidth &amp;&amp;
+                (
+                    bird.y - bird.radius < p.top ||
+                    bird.y + bird.radius > p.top + config.pipeGap
+                )
+            ) {
+                endGame();
+            }
+
+            // Score
+            if (p.x + config.pipeWidth / 2 < bird.x &amp;&amp; !p.counted) {
+
+                score++;
+                scoreSound.currentTime = 1;
+                scoreSound.play();
+                p.counted = true;
+
+                if (score > highScore) {
+
+                    highScore = score;
+
+                    localStorage.setItem(
+                        &quot;fbHighScore_original&quot;,
+                        highScore
+                    );
+                }
+            }
+
+            // Remove
+            if (p.x + config.pipeWidth < 0) {
+
+                this.current.shift();
+                i--;
+            }
+        }
+    },
+
+    draw() {
+
+        for (let i = 0; i < this.current.length; i++) {
+
+            let p = this.current[i];
+
+            ctx.fillStyle = &quot;#73BF2E&quot;;
+            ctx.strokeStyle = &quot;#000&quot;;
+            ctx.lineWidth = 2;
+
+            // Top Pipe
+            ctx.fillRect(p.x, 0, config.pipeWidth, p.top);
+            ctx.strokeRect(p.x, -2, config.pipeWidth, p.top + 2);
+
+            ctx.fillStyle = &quot;#94E044&quot;;
+
+            ctx.fillRect(
+                p.x - 2,
+                p.top - 20,
+                config.pipeWidth + 4,
+                20
+            );
+
+            ctx.strokeRect(
+                p.x - 2,
+                p.top - 20,
+                config.pipeWidth + 4,
+                20
+            );
+
+            // Bottom Pipe
+            let bottomY = p.top + config.pipeGap;
+            let bottomHeight = ground.y - bottomY;
+
+            ctx.fillStyle = &quot;#73BF2E&quot;;
+
+            ctx.fillRect(
+                p.x,
+                bottomY,
+                config.pipeWidth,
+                bottomHeight
+            );
+
+            ctx.strokeRect(
+                p.x,
+                bottomY,
+                config.pipeWidth,
+                bottomHeight + 2
+            );
+
+            ctx.fillStyle = &quot;#94E044&quot;;
+
+            ctx.fillRect(
+                p.x - 2,
+                bottomY,
+                config.pipeWidth + 4,
+                20
+            );
+
+            ctx.strokeRect(
+                p.x - 2,
+                bottomY,
+                config.pipeWidth + 4,
+                20
+            );
+        }
+    }
+};
+
+// --- MODERN BACKGROUND ---
+function drawBackground() {
+
+    // Sky Gradient
+    const skyGradient = ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+
+    skyGradient.addColorStop(0, &quot;#7dd3fc&quot;);
+    skyGradient.addColorStop(0.45, &quot;#38bdf8&quot;);
+    skyGradient.addColorStop(1, &quot;#0ea5e9&quot;);
+
+    ctx.fillStyle = skyGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Sun Glow
+    const sunGradient = ctx.createRadialGradient(
+        250, 90, 10,
+        250, 90, 80
+    );
+
+    sunGradient.addColorStop(0, &quot;rgba(255,255,255,0.9)&quot;);
+    sunGradient.addColorStop(0.4, &quot;rgba(255,240,180,0.35)&quot;);
+    sunGradient.addColorStop(1, &quot;rgba(255,255,255,0)&quot;);
+
+    ctx.fillStyle = sunGradient;
+
+    ctx.beginPath();
+    ctx.arc(250, 90, 80, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Clouds
+    ctx.fillStyle = &quot;rgba(255,255,255,0.75)&quot;;
+
+    function drawCloud(x, y, scale = 1) {
+
+        ctx.beginPath();
+
+        ctx.arc(x, y, 16 * scale, 0, Math.PI * 2);
+        ctx.arc(x + 18 * scale, y - 8 * scale, 20 * scale, 0, Math.PI * 2);
+        ctx.arc(x + 40 * scale, y, 15 * scale, 0, Math.PI * 2);
+
+        ctx.fill();
+    }
+
+    drawCloud(40 + (frames * 0.15 % 400), 90, 1);
+    drawCloud(180 + (frames * 0.1 % 380), 60, 0.8);
+    drawCloud(-120 + (frames * 0.2 % 500), 140, 1.2);
+
+    // Mountains
+    ctx.fillStyle = &quot;#7ccf8a&quot;;
+
+    ctx.beginPath();
+    ctx.moveTo(0, ground.y - 50);
+
+    for (let i = 0; i <= canvas.width; i += 40) {
+
+        const height = Math.sin(i * 0.04) * 18;
+
+        ctx.lineTo(i, ground.y - 55 - height);
+    }
+
+    ctx.lineTo(canvas.width, ground.y);
+    ctx.lineTo(0, ground.y);
+
+    ctx.closePath();
+    ctx.fill();
+
+    // City silhouette
+    ctx.fillStyle = &quot;rgba(255,255,255,0.18)&quot;;
+
+    for (let i = 0; i < canvas.width; i += 28) {
+
+        const h = 40 + Math.sin(i) * 12;
+
+        ctx.fillRect(
+            i,
+            ground.y - h - 15,
+            18,
+            h
+        );
+    }
+
+    // Foreground grass
+    const grassGradient = ctx.createLinearGradient(
+        0,
+        ground.y - 60,
+        0,
+        ground.y
+    );
+
+    grassGradient.addColorStop(0, &quot;#86efac&quot;);
+    grassGradient.addColorStop(1, &quot;#22c55e&quot;);
+
+    ctx.fillStyle = grassGradient;
+
+    ctx.fillRect(
+        0,
+        ground.y - 60,
+        canvas.width,
+        60
+    );
+
+    // Floating particles
+    ctx.fillStyle = &quot;rgba(255,255,255,0.25)&quot;;
+
+    for (let i = 0; i < 20; i++) {
+
+        const x = (i * 37 + frames * 0.3) % canvas.width;
+
+        const y =
+            40 +
+            (Math.sin((frames + i * 20) * 0.02) * 20) +
+            i * 6;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// --- UI ---
+function drawUI() {
+
+    ctx.strokeStyle = &quot;#000&quot;;
+    ctx.lineWidth = 4;
+    ctx.textAlign = &quot;center&quot;;
+
+    // Playing
+    if (gameState === 1) {
+
+        ctx.fillStyle = &quot;#FFF&quot;;
+
+        ctx.font =
+            &quot;bold 40px 'Arial Black', Gadget, sans-serif&quot;;
+
+        ctx.strokeText(score, canvas.width / 2, 60);
+        ctx.fillText(score, canvas.width / 2, 60);
+    }
+
+    // Waiting
+    if (gameState === 0) {
+
+        ctx.fillStyle = &quot;#FFF&quot;;
+
+        ctx.font =
+            &quot;bold 32px 'Arial Black', sans-serif&quot;;
+
+        ctx.strokeText(
+            &quot;FLAPPY BIRD&quot;,
+            canvas.width / 2,
+            110
+        );
+
+        ctx.fillText(
+            &quot;FLAPPY BIRD&quot;,
+            canvas.width / 2,
+            110
+        );
+
+        ctx.font = &quot;16px sans-serif&quot;;
+
+        ctx.fillText(
+            &quot;BẤM ĐỂ CHƠI&quot;,
+            canvas.width / 2,
+            280
+        );
+
+        ctx.beginPath();
+
+        ctx.arc(
+            canvas.width / 2,
+            240,
+            15,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.stroke();
+    }
+
+    // Game Over
+    if (gameState === 2) {
+
+        ctx.fillStyle = &quot;#F75300&quot;;
+
+        ctx.font =
+            &quot;bold 34px 'Arial Black', sans-serif&quot;;
+
+        ctx.strokeText(
+            &quot;GAME OVER&quot;,
+            canvas.width / 2,
+            130
+        );
+
+        ctx.fillText(
+            &quot;GAME OVER&quot;,
+            canvas.width / 2,
+            130
+        );
+
+        // Score Box
+        ctx.fillStyle = &quot;#DED895&quot;;
+
+        ctx.fillRect(40, 170, 240, 110);
+        ctx.strokeRect(40, 170, 240, 110);
+
+        // Score
+        ctx.fillStyle = &quot;#DE9C00&quot;;
+
+        ctx.font = &quot;bold 13px sans-serif&quot;;
+        ctx.textAlign = &quot;right&quot;;
+
+        ctx.fillText(&quot;SCORE&quot;, 260, 195);
+
+        ctx.fillStyle = &quot;#FFF&quot;;
+        ctx.font = &quot;bold 20px sans-serif&quot;;
+
+        ctx.strokeText(score, 260, 220);
+        ctx.fillText(score, 260, 220);
+
+        // Best
+        ctx.fillStyle = &quot;#DE9C00&quot;;
+
+        ctx.font = &quot;bold 13px sans-serif&quot;;
+
+        ctx.fillText(&quot;BEST&quot;, 260, 250);
+
+        ctx.fillStyle = &quot;#FFF&quot;;
+
+        ctx.font = &quot;bold 20px sans-serif&quot;;
+
+        ctx.strokeText(highScore, 260, 275);
+        ctx.fillText(highScore, 260, 275);
+
+        // Medal
+        if (score >= 10) {
+
+            ctx.fillStyle =
+                score >= 20
+                    ? &quot;#F7D308&quot;
+                    : &quot;#B5B5B5&quot;;
+
+            ctx.beginPath();
+
+            ctx.arc(85, 225, 20, 0, Math.PI * 2);
+
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        ctx.textAlign = &quot;center&quot;;
+
+        ctx.fillStyle = &quot;#FFF&quot;;
+
+        ctx.font = &quot;14px sans-serif&quot;;
+
+        ctx.fillText(
+            &quot;CHẠM ĐỂ CHƠI LẠI&quot;,
+            canvas.width / 2,
+            315
+        );
+    }
+}
+
+// --- CORE ---
+function endGame() {
+    gameState = 2;
+}
+
+function resetGame() {
+
+    bird.reset();
+    pipes.reset();
+
+    score = 0;
+    gameState = 0;
+    frames = 0;
+}
+
+function handleAction() {
+
+    if (gameState === 0) {
+
+        gameState = 1;
+        bird.jump();
+
+    } else if (gameState === 1) {
+
+        bird.jump();
+
+    } else if (gameState === 2) {
+
+        if (frames > 50) {
+            resetGame();
+        }
+    }
+}
+
+// --- EVENTS ---
+document.addEventListener(&quot;keydown&quot;, function(e) {
+
+    if (
+        e.code === &quot;Space&quot; ||
+        e.code === &quot;ArrowUp&quot;
+    ) {
+        handleAction();
+    }
+});
+
+canvas.addEventListener(&quot;click&quot;, handleAction);
+
+canvas.addEventListener(
+    &quot;touchstart&quot;,
+    function(e) {
+
+        e.preventDefault();
+        handleAction();
+
+    },
+    false
+);
+// ===== SOUND EFFECT =====
+const scoreSound = { play:()=>{}, pause:()=>{}, currentTime:0, volume:0 };
+// --- LOOP ---
+function loop() {
+
+    frames++;
+
+    drawBackground();
+
+    pipes.update();
+    pipes.draw();
+
+    ground.draw();
+
+    bird.update();
+    bird.draw();
+
+    drawUI();
+
+    requestAnimationFrame(loop);
+}
+
+loop();
+
+</script>
+
+</body>
+</html>" scrolling="no" allowtransparency="true"></iframe>
+  </div>
+</div>
+<script>
+function openFlappyModal() {
+  document.getElementById('flappyModal').classList.add('open');
+  // Reload iframe each time to reset game
+  const frame = document.getElementById('flappyFrame');
+  const src = frame.srcdoc;
+  frame.srcdoc = '';
+  setTimeout(() => { frame.srcdoc = src; }, 50);
+}
+function closeFlappyModal() {
+  document.getElementById('flappyModal').classList.remove('open');
+}
+// Close when clicking backdrop
+document.getElementById('flappyModal').addEventListener('click', function(e) {
+  if (e.target === this) closeFlappyModal();
+});
+</script>
+<!-- ===== END FLAPPY BIRD MODAL ===== -->
 
 </body>
 </html>
